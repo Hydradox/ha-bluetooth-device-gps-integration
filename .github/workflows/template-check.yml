@@ -1,0 +1,39 @@
+name: Template check
+
+# Only exists in the template: `scripts/init.py` deletes it. Guards that a repository generated from the
+# template still works (lint, tests and release configuration) with a different domain, name and owner.
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  init:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+      - uses: astral-sh/setup-uv@v7
+      - name: Initialise a copy
+        run: |
+          cp -r . "$RUNNER_TEMP/generated"
+          cd "$RUNNER_TEMP/generated"
+          python3 scripts/init.py --domain my_thing --name "My Thing" --repo someone/ha-my-thing
+          test -d custom_components/my_thing
+          test ! -e scripts/init.py
+          ! grep -rIl --exclude-dir=.git --exclude-dir=.venv --exclude-dir=node_modules --exclude=LICENSE \
+              -e integration_template -e "Integration Template" -e Hydradox -e ha-template-integration-hacs .
+      - name: Lint and test the copy
+        working-directory: ${{ runner.temp }}/generated
+        run: |
+          uv sync
+          uv run ruff check .
+          uv run ruff format --check .
+          uv run pytest
+          node scripts/set-version.mjs 1.2.3
+          grep -q '"version": "1.2.3"' custom_components/my_thing/manifest.json

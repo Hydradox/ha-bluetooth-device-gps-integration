@@ -1,0 +1,50 @@
+[project]
+name = "integration-template"
+version = "0.0.0" # unused: the release version lives in manifest.json (set by semantic-release)
+description = "Home Assistant custom integration distributed through HACS"
+requires-python = ">=3.14"
+dependencies = []
+
+[dependency-groups]
+dev = [
+  "pytest-homeassistant-custom-component", # pins Home Assistant, pytest and the test helpers
+  "ruff",
+]
+
+[tool.uv]
+package = false
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+pythonpath = ["."]
+
+[tool.ruff]
+target-version = "py314"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+  "COM812", # conflicts with the formatter
+  "CPY001", # no copyright header
+  "D203",   # use D211
+  "D213",   # use D212
+  "ISC001", # conflicts with the formatter
+]
+
+[tool.ruff.lint.per-file-ignores]
+"scripts/**" = [
+  "T201",   # CLI output
+  "INP001", # scripts/ is not a package
+]
+"tests/**" = [
+  "S101",   # assert is how pytest works
+  "INP001", # tests/ is not a package
+  "ANN",    # fixtures and tests do not need annotations
+  "D",      # no docstrings required in tests
+  "PLR2004" # magic values are fine in assertions
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["custom_components"]

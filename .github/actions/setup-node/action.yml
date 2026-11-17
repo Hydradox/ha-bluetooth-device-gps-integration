@@ -1,0 +1,11 @@
+name: Setup Node
+description: Install Node and the release tooling (cached)
+runs:
+  using: composite
+  steps:
+    - uses: actions/setup-node@v7
+      with:
+        node-version: 22
+        cache: npm
+    - run: npm ci
+      shell: bash

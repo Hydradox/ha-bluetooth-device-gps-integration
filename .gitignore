@@ -1,0 +1,20 @@
+node_modules/
+.venv/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+.idea/
+.vscode/
+*.log
+
+# Never commit credentials
+.env
+.env.*
+.npmrc
+*.pem
+*.key
+.DS_Store
+
+# Throwaway Home Assistant state (dev/ha.sh); only the seed configuration.yaml is tracked
+dev/config/*
+!dev/config/configuration.yaml

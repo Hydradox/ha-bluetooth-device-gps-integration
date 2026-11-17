@@ -1,0 +1,45 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+
+# Never cancel a run on main: a half-finished release must not be interrupted.
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    uses: ./.github/workflows/quality.yml
+
+  publish:
+    needs: quality
+    # The template repository itself never releases; repositories created from it do.
+    if: ${{ !github.event.repository.is_template }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write # tag, release, push the CHANGELOG + manifest commit
+      issues: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0 # semantic-release needs the full history and tags
+          persist-credentials: false
+      - uses: ./.github/actions/setup-node
+      # `main` requires status checks, which the release commit (chore(release)) cannot have. GITHUB_TOKEN
+      # cannot be added to the ruleset bypass list, so the push uses RELEASE_TOKEN: a token of a repository
+      # admin, and "Repository admin" is in the bypass list of the ruleset. Falls back to GITHUB_TOKEN.
+      - run: npx semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN || secrets.GITHUB_TOKEN }}
+
+  # Validates the repository settings (description, topics, issues) and the tagged release.
+  hacs:
+    needs: publish
+    uses: ./.github/workflows/hacs.yml

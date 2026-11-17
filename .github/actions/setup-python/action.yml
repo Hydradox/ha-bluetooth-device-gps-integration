@@ -1,0 +1,10 @@
+name: Setup Python
+description: Install uv, Python (from .python-version) and the locked dev dependencies (cached)
+runs:
+  using: composite
+  steps:
+    - uses: astral-sh/setup-uv@v7
+      with:
+        enable-cache: true
+    - run: uv sync --locked
+      shell: bash
