@@ -3,7 +3,7 @@
     "step": {
       "user": {
         "title": "Bluetooth Device GPS einrichten",
-        "description": "Verfolge Fahrzeuge anhand der Bluetooth-Verbindung und des Standorts der Home Assistant Companion App. Fahrzeuge werden anschließend über die Schaltfläche **Fahrzeug hinzufügen** hinzugefügt."
+        "description": "Verfolge Geräte anhand der Bluetooth-Verbindung und des Standorts der Home Assistant Companion App. Geräte werden anschließend über die Schaltfläche **Gerät hinzufügen** hinzugefügt."
       }
     },
     "abort": {
@@ -12,15 +12,15 @@
   },
   "config_subentries": {
     "vehicle": {
-      "entry_type": "Fahrzeug",
+      "entry_type": "Gerät",
       "initiate_flow": {
-        "user": "Fahrzeug hinzufügen",
-        "reconfigure": "Fahrzeug neu konfigurieren"
+        "user": "Gerät hinzufügen",
+        "reconfigure": "Gerät neu konfigurieren"
       },
       "step": {
         "user": {
-          "title": "Fahrzeug hinzufügen",
-          "description": "Das Fahrzeug folgt dem Telefon, das mit einer seiner Bluetooth-Adressen verbunden ist, und bleibt dort stehen, wo es geparkt wurde, wenn das Telefon die Verbindung trennt.",
+          "title": "Gerät hinzufügen",
+          "description": "Das Gerät folgt dem Telefon, das mit einer seiner Bluetooth-Adressen verbunden ist, und bleibt dort stehen, wo es geparkt wurde, sobald das Telefon die Verbindung trennt.",
           "data": {
             "name": "Name",
             "macs": "Bluetooth-Adressen",
@@ -32,8 +32,8 @@
           }
         },
         "edit_vehicle": {
-          "title": "Fahrzeug bearbeiten",
-          "description": "Das Fahrzeug folgt dem Telefon, das mit einer seiner Bluetooth-Adressen verbunden ist, und bleibt dort stehen, wo es geparkt wurde, wenn das Telefon die Verbindung trennt.",
+          "title": "Gerät bearbeiten",
+          "description": "Das Gerät folgt dem Telefon, das mit einer seiner Bluetooth-Adressen verbunden ist, und bleibt dort stehen, wo es geparkt wurde, sobald das Telefon die Verbindung trennt.",
           "data": {
             "name": "Name",
             "macs": "Bluetooth-Adressen",
@@ -45,7 +45,7 @@
           }
         },
         "reconfigure": {
-          "title": "Fahrzeug neu konfigurieren",
+          "title": "Gerät neu konfigurieren",
           "description": "Was möchtest du tun?",
           "menu_options": {
             "edit_vehicle": "Name, Adressen und Bild bearbeiten",
@@ -54,7 +54,7 @@
         },
         "set_location": {
           "title": "Standort festlegen",
-          "description": "Platziere das Fahrzeug auf der Karte. Es wird sofort verschoben und folgt danach wie gewohnt wieder den Telefonen.",
+          "description": "Platziere das Gerät auf der Karte. Es wird sofort verschoben und folgt danach wie gewohnt wieder Telefonen.",
           "data": {
             "location": "Standort"
           }
@@ -63,11 +63,11 @@
       "error": {
         "invalid_mac": "Eine der Adressen ist keine gültige MAC-Adresse.",
         "no_macs": "Füge mindestens eine Bluetooth-Adresse hinzu.",
-        "mac_in_use": "Eine Adresse wird bereits von einem anderen Fahrzeug verwendet.",
+        "mac_in_use": "Eine Adresse wird bereits von einem anderen Gerät verwendet.",
         "invalid_picture": "Das Bild muss ein JPEG-, PNG-, GIF- oder WebP-Bild mit höchstens 10 MB sein."
       },
       "abort": {
-        "reconfigure_successful": "Fahrzeug aktualisiert.",
+        "reconfigure_successful": "Gerät aktualisiert.",
         "location_set": "Standort aktualisiert.",
         "not_loaded": "Die Integration ist noch nicht geladen, versuche es gleich noch einmal."
       }
@@ -77,20 +77,18 @@
     "step": {
       "init": {
         "title": "Optionen für Bluetooth Device GPS",
-        "description": "Einstellungen, die für alle Fahrzeuge gelten.",
+        "description": "Einstellungen, die für alle Geräte gelten.",
         "data": {
-          "phones": "Telefone",
-          "disconnect_grace": "Mindestzeit vor dem Parken",
-          "fix_timeout": "Dauer der Standortanfrage",
-          "max_accuracy": "Ausreichende Genauigkeit",
-          "live_min_interval": "Mindestsekunden zwischen Live-Updates"
+          "phones": "Erlaubte Telefone (Whitelist)",
+          "disconnect_grace": "Toleranz bei Wiederverbindung",
+          "fix_timeout": "Zeitlimit für Standort",
+          "max_accuracy": "Mindestgenauigkeit"
         },
         "data_description": {
-          "phones": "Nur diese Telefone bewegen Fahrzeuge. Leer lassen, um jedes Telefon mit aktiviertem Bluetooth-Verbindungssensor zuzulassen.",
-          "disconnect_grace": "Der Standort wird angefordert, sobald das letzte Telefon die Verbindung trennt. Das Fahrzeug wird erst nach dieser Zeit geparkt, damit kurze Unterbrechungen und Motorneustarts es nicht parken.",
+          "phones": "Nur diese Telefone können Geräte bewegen. Leer lassen, um jedes Telefon mit aktiviertem Sensor „Bluetooth-Verbindung“ zuzulassen.",
+          "disconnect_grace": "Der Standort wird angefordert, sobald das letzte Telefon die Verbindung trennt. Das Gerät wird erst geparkt, wenn diese Zeit vergangen ist, damit ein kurzer Abbruch oder ein Motorneustart (das Telefon verbindet sich zwischendurch wieder) es nicht parkt.",
           "fix_timeout": "Wie lange versucht wird, nach dem Trennen eine genaue Position zu erhalten, bevor die beste verfügbare verwendet wird (Standard 5 Minuten).",
-          "max_accuracy": "Eine Position mit mindestens dieser Genauigkeit (Meter) wird als Parkplatz akzeptiert. Die erste, die eintrifft, gewinnt.",
-          "live_min_interval": "Drosselung der Live-Position während der Fahrt. 0 folgt jedem Update."
+          "max_accuracy": "Eine Position mit mindestens dieser Genauigkeit (Meter) wird als Parkplatz akzeptiert. Die erste, die eintrifft, gewinnt."
         }
       }
     }
@@ -126,7 +124,7 @@
   "services": {
     "set_location": {
       "name": "Standort festlegen",
-      "description": "Verschiebt ein Fahrzeug an die angegebenen Koordinaten.",
+      "description": "Verschiebt ein Gerät zu den angegebenen Koordinaten.",
       "fields": {
         "location": {
           "name": "Standort",
@@ -138,7 +136,7 @@
   "issues": {
     "no_bluetooth_sensor": {
       "title": "Kein Telefon mit Bluetooth-Verbindungssensor",
-      "description": "Kein Telefon mit der Companion App hat einen aktivierten Sensor **Bluetooth-Verbindung**, daher können Fahrzeuge nicht verfolgt werden. Aktiviere ihn in der Android-App (Einstellungen → Companion App → Sensoren verwalten → Bluetooth-Verbindung) und bei Bedarf in den Entitätseinstellungen in Home Assistant. iOS bietet diesen Sensor nicht."
+      "description": "Kein Telefon mit der Companion App hat einen aktivierten Sensor **Bluetooth-Verbindung**, daher können Geräte nicht verfolgt werden. Aktiviere ihn in der Android-App (Einstellungen → Companion App → Sensoren verwalten → Bluetooth-Verbindung) und bei Bedarf in den Entitätseinstellungen in Home Assistant. iOS bietet diesen Sensor nicht."
     }
   }
 }

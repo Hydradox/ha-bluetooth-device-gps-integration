@@ -69,7 +69,7 @@ async def test_options_flow(hass):
     assert result["type"] is FlowResultType.FORM
     result = await hass.config_entries.options.async_configure(
         result["flow_id"],
-        {"disconnect_grace": 10, CONF_FIX_TIMEOUT: 30, "max_accuracy": 25, "live_min_interval": 0},
+        {"disconnect_grace": 10, CONF_FIX_TIMEOUT: 30, "max_accuracy": 25},
     )
     assert result["type"] is FlowResultType.CREATE_ENTRY
     assert entry.options[CONF_FIX_TIMEOUT] == 30

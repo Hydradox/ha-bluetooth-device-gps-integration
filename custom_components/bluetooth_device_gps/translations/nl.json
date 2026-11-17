@@ -3,7 +3,7 @@
     "step": {
       "user": {
         "title": "Bluetooth Device GPS instellen",
-        "description": "Volg voertuigen met de Bluetooth-verbinding en locatie van de Home Assistant Companion-app. Voertuigen voeg je daarna toe met de knop **Voertuig toevoegen**."
+        "description": "Volg apparaten met de Bluetooth-verbinding en locatie van de Home Assistant Companion-app. Apparaten voeg je daarna toe met de knop **Apparaat toevoegen**."
       }
     },
     "abort": {
@@ -12,15 +12,15 @@
   },
   "config_subentries": {
     "vehicle": {
-      "entry_type": "Voertuig",
+      "entry_type": "Apparaat",
       "initiate_flow": {
-        "user": "Voertuig toevoegen",
-        "reconfigure": "Voertuig opnieuw configureren"
+        "user": "Apparaat toevoegen",
+        "reconfigure": "Apparaat opnieuw configureren"
       },
       "step": {
         "user": {
-          "title": "Voertuig toevoegen",
-          "description": "Het voertuig volgt de telefoon die verbonden is met een van zijn Bluetooth-adressen en blijft staan waar het geparkeerd werd wanneer de telefoon de verbinding verbreekt.",
+          "title": "Apparaat toevoegen",
+          "description": "Het apparaat volgt de telefoon die met een van de Bluetooth-adressen verbonden is en blijft staan waar het geparkeerd is zodra de telefoon de verbinding verbreekt.",
           "data": {
             "name": "Naam",
             "macs": "Bluetooth-adressen",
@@ -32,8 +32,8 @@
           }
         },
         "edit_vehicle": {
-          "title": "Voertuig bewerken",
-          "description": "Het voertuig volgt de telefoon die verbonden is met een van zijn Bluetooth-adressen en blijft staan waar het geparkeerd werd wanneer de telefoon de verbinding verbreekt.",
+          "title": "Apparaat bewerken",
+          "description": "Het apparaat volgt de telefoon die met een van de Bluetooth-adressen verbonden is en blijft staan waar het geparkeerd is zodra de telefoon de verbinding verbreekt.",
           "data": {
             "name": "Naam",
             "macs": "Bluetooth-adressen",
@@ -45,7 +45,7 @@
           }
         },
         "reconfigure": {
-          "title": "Voertuig opnieuw configureren",
+          "title": "Apparaat opnieuw configureren",
           "description": "Wat wil je doen?",
           "menu_options": {
             "edit_vehicle": "Naam, adressen en afbeelding bewerken",
@@ -54,7 +54,7 @@
         },
         "set_location": {
           "title": "Locatie instellen",
-          "description": "Plaats het voertuig op de kaart. Het wordt direct verplaatst en volgt daarna weer telefoons zoals gewoonlijk.",
+          "description": "Plaats het apparaat op de kaart. Het wordt meteen verplaatst en volgt daarna weer gewoon telefoons.",
           "data": {
             "location": "Locatie"
           }
@@ -63,11 +63,11 @@
       "error": {
         "invalid_mac": "Een van de adressen is geen geldig MAC-adres.",
         "no_macs": "Voeg minstens één Bluetooth-adres toe.",
-        "mac_in_use": "Een adres wordt al door een ander voertuig gebruikt.",
+        "mac_in_use": "Een adres wordt al door een ander apparaat gebruikt.",
         "invalid_picture": "De afbeelding moet een JPEG-, PNG-, GIF- of WebP-afbeelding van maximaal 10 MB zijn."
       },
       "abort": {
-        "reconfigure_successful": "Voertuig bijgewerkt.",
+        "reconfigure_successful": "Apparaat bijgewerkt.",
         "location_set": "Locatie bijgewerkt.",
         "not_loaded": "De integratie is nog niet geladen, probeer het zo opnieuw."
       }
@@ -77,20 +77,18 @@
     "step": {
       "init": {
         "title": "Opties voor Bluetooth Device GPS",
-        "description": "Instellingen die voor alle voertuigen gelden.",
+        "description": "Instellingen die voor alle apparaten gelden.",
         "data": {
-          "phones": "Telefoons",
-          "disconnect_grace": "Minimale tijd voor het parkeren",
-          "fix_timeout": "Duur van het locatieverzoek",
-          "max_accuracy": "Voldoende nauwkeurigheid",
-          "live_min_interval": "Minimale seconden tussen live-updates"
+          "phones": "Toegestane telefoons (whitelist)",
+          "disconnect_grace": "Tolerantie voor herverbinding",
+          "fix_timeout": "Time-out voor locatie",
+          "max_accuracy": "Minimale nauwkeurigheid"
         },
         "data_description": {
-          "phones": "Alleen deze telefoons verplaatsen voertuigen. Laat leeg om elke telefoon met de ingeschakelde Bluetooth-verbindingssensor toe te staan.",
-          "disconnect_grace": "De locatie wordt opgevraagd zodra de laatste telefoon de verbinding verbreekt. Het voertuig wordt pas na deze tijd geparkeerd, zodat korte onderbrekingen en motorherstarts het niet parkeren.",
+          "phones": "Alleen deze telefoons kunnen apparaten verplaatsen. Laat leeg om elke telefoon met de ingeschakelde sensor voor Bluetooth-verbinding toe te staan.",
+          "disconnect_grace": "De locatie wordt opgevraagd zodra de laatste telefoon de verbinding verbreekt. Het apparaat wordt pas geparkeerd nadat deze tijd is verstreken, zodat een korte onderbreking of een motorherstart (de telefoon verbindt tussendoor weer) het niet parkeert.",
           "fix_timeout": "Hoe lang je blijft proberen een nauwkeurige positie te krijgen na het verbreken van de verbinding voordat de beste beschikbare wordt gebruikt (standaard 5 minuten).",
-          "max_accuracy": "Een positie met minstens deze nauwkeurigheid (meter) wordt als parkeerplek geaccepteerd. De eerste die binnenkomt wint.",
-          "live_min_interval": "Beperking voor de live positie tijdens het rijden. 0 volgt elke update."
+          "max_accuracy": "Een positie met minstens deze nauwkeurigheid (meter) wordt als parkeerplek geaccepteerd. De eerste die binnenkomt wint."
         }
       }
     }
@@ -126,7 +124,7 @@
   "services": {
     "set_location": {
       "name": "Locatie instellen",
-      "description": "Verplaatst een voertuig naar de opgegeven coördinaten.",
+      "description": "Verplaatst een apparaat naar de opgegeven coördinaten.",
       "fields": {
         "location": {
           "name": "Locatie",
@@ -138,7 +136,7 @@
   "issues": {
     "no_bluetooth_sensor": {
       "title": "Geen telefoon met de Bluetooth-verbindingssensor",
-      "description": "Geen enkele telefoon met de Companion-app heeft een ingeschakelde sensor **Bluetooth-verbinding**, dus voertuigen kunnen niet worden gevolgd. Schakel deze in de Android-app in (Instellingen → Companion-app → Sensoren beheren → Bluetooth-verbinding) en indien nodig in de entiteitsinstellingen in Home Assistant. iOS biedt deze sensor niet."
+      "description": "Geen enkele telefoon met de Companion-app heeft een ingeschakelde sensor **Bluetooth-verbinding**, dus apparaten kunnen niet worden gevolgd. Schakel deze in de Android-app in (Instellingen → Companion-app → Sensoren beheren → Bluetooth-verbinding) en indien nodig in de entiteitsinstellingen in Home Assistant. iOS biedt deze sensor niet."
     }
   }
 }

@@ -3,7 +3,7 @@
     "step": {
       "user": {
         "title": "Konfigurer Bluetooth Device GPS",
-        "description": "Følg køretøjer med Bluetooth-forbindelsen og placeringen fra Home Assistant Companion-appen. Køretøjer tilføjes bagefter med knappen **Tilføj køretøj**."
+        "description": "Følg enheder med Bluetooth-forbindelsen og placeringen fra Home Assistant Companion-appen. Enheder tilføjes bagefter med knappen **Tilføj enhed**."
       }
     },
     "abort": {
@@ -12,15 +12,15 @@
   },
   "config_subentries": {
     "vehicle": {
-      "entry_type": "Køretøj",
+      "entry_type": "Enhed",
       "initiate_flow": {
-        "user": "Tilføj køretøj",
-        "reconfigure": "Genkonfigurer køretøj"
+        "user": "Tilføj enhed",
+        "reconfigure": "Genkonfigurer enhed"
       },
       "step": {
         "user": {
-          "title": "Tilføj køretøj",
-          "description": "Køretøjet følger telefonen, der er forbundet til en af dets Bluetooth-adresser, og bliver stående, hvor det blev parkeret, når telefonen afbryder forbindelsen.",
+          "title": "Tilføj enhed",
+          "description": "Enheden følger telefonen, der er forbundet til en af dens Bluetooth-adresser, og bliver stående, hvor den blev parkeret, når telefonen afbryder forbindelsen.",
           "data": {
             "name": "Navn",
             "macs": "Bluetooth-adresser",
@@ -32,8 +32,8 @@
           }
         },
         "edit_vehicle": {
-          "title": "Rediger køretøj",
-          "description": "Køretøjet følger telefonen, der er forbundet til en af dets Bluetooth-adresser, og bliver stående, hvor det blev parkeret, når telefonen afbryder forbindelsen.",
+          "title": "Rediger enhed",
+          "description": "Enheden følger telefonen, der er forbundet til en af dens Bluetooth-adresser, og bliver stående, hvor den blev parkeret, når telefonen afbryder forbindelsen.",
           "data": {
             "name": "Navn",
             "macs": "Bluetooth-adresser",
@@ -45,7 +45,7 @@
           }
         },
         "reconfigure": {
-          "title": "Genkonfigurer køretøj",
+          "title": "Genkonfigurer enhed",
           "description": "Hvad vil du gøre?",
           "menu_options": {
             "edit_vehicle": "Rediger navn, adresser og billede",
@@ -54,7 +54,7 @@
         },
         "set_location": {
           "title": "Angiv placering",
-          "description": "Placer køretøjet på kortet. Det flyttes med det samme og følger derefter telefoner som normalt igen.",
+          "description": "Placer enheden på kortet. Den flyttes med det samme og følger derefter telefoner som normalt igen.",
           "data": {
             "location": "Placering"
           }
@@ -63,11 +63,11 @@
       "error": {
         "invalid_mac": "En af adresserne er ikke en gyldig MAC-adresse.",
         "no_macs": "Tilføj mindst én Bluetooth-adresse.",
-        "mac_in_use": "En adresse bruges allerede af et andet køretøj.",
+        "mac_in_use": "En adresse bruges allerede af en anden enhed.",
         "invalid_picture": "Billedet skal være et JPEG-, PNG-, GIF- eller WebP-billede på højst 10 MB."
       },
       "abort": {
-        "reconfigure_successful": "Køretøj opdateret.",
+        "reconfigure_successful": "Enhed opdateret.",
         "location_set": "Placering opdateret.",
         "not_loaded": "Integrationen er ikke indlæst endnu, prøv igen om lidt."
       }
@@ -77,20 +77,18 @@
     "step": {
       "init": {
         "title": "Indstillinger for Bluetooth Device GPS",
-        "description": "Indstillinger, der gælder for alle køretøjer.",
+        "description": "Indstillinger, der gælder for alle enheder.",
         "data": {
-          "phones": "Telefoner",
-          "disconnect_grace": "Mindste tid før parkering",
-          "fix_timeout": "Varighed af placeringsanmodning",
-          "max_accuracy": "Tilstrækkelig nøjagtighed",
-          "live_min_interval": "Mindste antal sekunder mellem liveopdateringer"
+          "phones": "Tilladte telefoner (hvidliste)",
+          "disconnect_grace": "Tolerance for genforbindelse",
+          "fix_timeout": "Timeout for placering",
+          "max_accuracy": "Mindste nøjagtighed"
         },
         "data_description": {
-          "phones": "Kun disse telefoner flytter køretøjer. Lad feltet stå tomt for at tillade alle telefoner med aktiveret Bluetooth-forbindelsessensor.",
-          "disconnect_grace": "Placeringen anmodes, så snart den sidste telefon afbryder forbindelsen. Køretøjet parkeres først efter denne tid, så korte afbrydelser og motorgenstarter ikke parkerer det.",
-          "fix_timeout": "Hvor længe der fortsat forsøges at få en nøjagtig position efter frakoblingen, før den bedst tilgængelige bruges (standard 5 minutter).",
-          "max_accuracy": "En position, der er mindst så nøjagtig (i meter), accepteres som parkeringssted. Den første, der kommer, vinder.",
-          "live_min_interval": "Begrænsning af livepositionen under kørsel. 0 følger hver opdatering."
+          "phones": "Kun disse telefoner kan flytte enheder. Lad feltet stå tomt for at tillade alle telefoner med sensoren for Bluetooth-forbindelse aktiveret.",
+          "disconnect_grace": "Placeringen anmodes, så snart den sidste telefon afbryder forbindelsen. Enheden parkeres først, når denne tid er gået, så et kort afbrud eller en motorstart (telefonen forbinder igen imens) ikke parkerer den.",
+          "fix_timeout": "Hvor længe der skal forsøges at få en nøjagtig position efter frakoblingen, før den bedst tilgængelige bruges (standard 5 minutter).",
+          "max_accuracy": "En position, der er mindst så nøjagtig (i meter), accepteres som parkeringssted. Den første, der kommer, vinder."
         }
       }
     }
@@ -126,7 +124,7 @@
   "services": {
     "set_location": {
       "name": "Angiv placering",
-      "description": "Flytter et køretøj til de angivne koordinater.",
+      "description": "Flytter en enhed til de angivne koordinater.",
       "fields": {
         "location": {
           "name": "Placering",
@@ -138,7 +136,7 @@
   "issues": {
     "no_bluetooth_sensor": {
       "title": "Ingen telefon med Bluetooth-forbindelsessensoren",
-      "description": "Ingen telefon med Companion-appen har sensoren **Bluetooth-forbindelse** aktiveret, så køretøjer kan ikke følges. Aktiver den i Android-appen (Indstillinger → Companion-appen → Administrer sensorer → Bluetooth-forbindelse) og om nødvendigt i entitetsindstillingerne i Home Assistant. iOS har ikke denne sensor."
+      "description": "Ingen telefon med Companion-appen har sensoren **Bluetooth-forbindelse** aktiveret, så enheder kan ikke følges. Aktiver den i Android-appen (Indstillinger → Companion-appen → Administrer sensorer → Bluetooth-forbindelse) og om nødvendigt i entitetsindstillingerne i Home Assistant. iOS har ikke denne sensor."
     }
   }
 }

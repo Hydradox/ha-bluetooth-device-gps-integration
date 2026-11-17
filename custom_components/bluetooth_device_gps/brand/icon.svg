@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2196f3"/>
+      <stop offset="1" stop-color="#0d47a1"/>
+    </linearGradient>
+  </defs>
+  <rect width="256" height="256" rx="56" fill="url(#bg)"/>
+  <!-- GPS pin -->
+  <path d="M128 118C128 118 100 92 100 70a28 28 0 1 1 56 0c0 22-28 48-28 48z" fill="#ffca28"/>
+  <circle cx="128" cy="70" r="10" fill="#0d47a1"/>
+  <!-- dotted link pin -> row -->
+  <path d="M128 130v14" stroke="#fff" stroke-opacity=".6" stroke-width="5" stroke-linecap="round" stroke-dasharray="1 10"/>
+  <!-- phone -->
+  <rect x="38" y="146" width="40" height="72" rx="9" fill="none" stroke="#fff" stroke-width="7"/>
+  <circle cx="58" cy="207" r="3.5" fill="#fff"/>
+  <!-- bluetooth waves -->
+  <g fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round">
+    <path d="M96 172a14 14 0 0 1 0 20" />
+    <path d="M106 160a30 30 0 0 1 0 44" stroke-opacity=".75"/>
+    <path d="M116 148a46 46 0 0 1 0 68" stroke-opacity=".5"/>
+  </g>
+  <!-- car -->
+  <g fill="#fff">
+    <path d="M150 190c0-6 3-9 8-10l8-18c2-4 5-6 9-6h22c5 0 8 2 10 6l10 18c5 1 9 4 9 10v10c0 3-2 5-5 5H155c-3 0-5-2-5-5z"/>
+  </g>
+  <path d="M173 170l4-10h11v10zM194 170v-10h6l5 10z" fill="#1565c0"/>
+  <g fill="#fff" stroke="#1565c0" stroke-width="5">
+    <circle cx="170" cy="207" r="10"/>
+    <circle cx="214" cy="207" r="10"/>
+  </g>
+</svg>

@@ -16,14 +16,12 @@ from homeassistant.util import dt as dt_util
 from .const import (
     CONF_DISCONNECT_GRACE,
     CONF_FIX_TIMEOUT,
-    CONF_LIVE_MIN_INTERVAL,
     CONF_MACS,
     CONF_MAX_ACCURACY,
     CONF_PHONES,
     CONF_PICTURE,
     DEFAULT_DISCONNECT_GRACE,
     DEFAULT_FIX_TIMEOUT,
-    DEFAULT_LIVE_MIN_INTERVAL,
     DEFAULT_MAX_ACCURACY,
     DOMAIN,
     EVENT_DEPARTED,
@@ -74,7 +72,6 @@ class Vehicle:
         self.disconnected_at: datetime | None = None
         self.collect_phones: set[str] = set()
         self.collecting = False
-        self.last_live_write: datetime | None = None
         self.timer: CALLBACK_TYPE | None = None  # fix timeout (or restart debounce)
         self.grace_timer: CALLBACK_TYPE | None = None  # minimum time before parking
         self.grace_done = False
@@ -394,15 +391,7 @@ class BluetoothGpsManager:
             return
         if vehicle.fix and best.time < vehicle.fix.time:
             return  # never jump back to an older fix
-        interval = self._option(CONF_LIVE_MIN_INTERVAL, DEFAULT_LIVE_MIN_INTERVAL)
-        now = dt_util.utcnow()
-        if (
-            interval
-            and vehicle.last_live_write
-            and (now - vehicle.last_live_write).total_seconds() < interval
-        ):
-            return
-        vehicle.fix, vehicle.source, vehicle.last_live_write = best, SOURCE_LIVE, now
+        vehicle.fix, vehicle.source = best, SOURCE_LIVE
         self._changed(vehicle)
 
     # ---- settling ------------------------------------------------------------------------

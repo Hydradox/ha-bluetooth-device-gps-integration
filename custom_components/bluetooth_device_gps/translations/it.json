@@ -3,7 +3,7 @@
     "step": {
       "user": {
         "title": "Configura Bluetooth Device GPS",
-        "description": "Traccia i veicoli con la connessione Bluetooth e la posizione dell'app Home Assistant Companion. I veicoli si aggiungono poi con il pulsante **Aggiungi veicolo**."
+        "description": "Traccia i dispositivi con la connessione Bluetooth e la posizione dell'app Home Assistant Companion. I dispositivi si aggiungono poi con il pulsante **Aggiungi dispositivo**."
       }
     },
     "abort": {
@@ -12,15 +12,15 @@
   },
   "config_subentries": {
     "vehicle": {
-      "entry_type": "Veicolo",
+      "entry_type": "Dispositivo",
       "initiate_flow": {
-        "user": "Aggiungi veicolo",
-        "reconfigure": "Riconfigura veicolo"
+        "user": "Aggiungi dispositivo",
+        "reconfigure": "Riconfigura dispositivo"
       },
       "step": {
         "user": {
-          "title": "Aggiungi veicolo",
-          "description": "Il veicolo segue il telefono connesso a uno dei suoi indirizzi Bluetooth e resta dove è stato parcheggiato quando il telefono si disconnette.",
+          "title": "Aggiungi dispositivo",
+          "description": "Il dispositivo segue il telefono connesso a uno dei suoi indirizzi Bluetooth e resta dove è stato parcheggiato quando il telefono si disconnette.",
           "data": {
             "name": "Nome",
             "macs": "Indirizzi Bluetooth",
@@ -32,8 +32,8 @@
           }
         },
         "edit_vehicle": {
-          "title": "Modifica veicolo",
-          "description": "Il veicolo segue il telefono connesso a uno dei suoi indirizzi Bluetooth e resta dove è stato parcheggiato quando il telefono si disconnette.",
+          "title": "Modifica dispositivo",
+          "description": "Il dispositivo segue il telefono connesso a uno dei suoi indirizzi Bluetooth e resta dove è stato parcheggiato quando il telefono si disconnette.",
           "data": {
             "name": "Nome",
             "macs": "Indirizzi Bluetooth",
@@ -45,7 +45,7 @@
           }
         },
         "reconfigure": {
-          "title": "Riconfigura veicolo",
+          "title": "Riconfigura dispositivo",
           "description": "Cosa vuoi fare?",
           "menu_options": {
             "edit_vehicle": "Modifica nome, indirizzi e immagine",
@@ -54,7 +54,7 @@
         },
         "set_location": {
           "title": "Imposta la posizione",
-          "description": "Posiziona il veicolo sulla mappa. Viene spostato subito e poi continua a seguire i telefoni come al solito.",
+          "description": "Posiziona il dispositivo sulla mappa. Viene spostato subito e poi continua a seguire i telefoni come al solito.",
           "data": {
             "location": "Posizione"
           }
@@ -63,11 +63,11 @@
       "error": {
         "invalid_mac": "Uno degli indirizzi non è un indirizzo MAC valido.",
         "no_macs": "Aggiungi almeno un indirizzo Bluetooth.",
-        "mac_in_use": "Un indirizzo è già usato da un altro veicolo.",
+        "mac_in_use": "Un indirizzo è già usato da un altro dispositivo.",
         "invalid_picture": "L'immagine deve essere JPEG, PNG, GIF o WebP di al massimo 10 MB."
       },
       "abort": {
-        "reconfigure_successful": "Veicolo aggiornato.",
+        "reconfigure_successful": "Dispositivo aggiornato.",
         "location_set": "Posizione aggiornata.",
         "not_loaded": "L'integrazione non è ancora caricata, riprova tra un momento."
       }
@@ -77,20 +77,18 @@
     "step": {
       "init": {
         "title": "Opzioni di Bluetooth Device GPS",
-        "description": "Impostazioni comuni a tutti i veicoli.",
+        "description": "Impostazioni comuni a tutti i dispositivi.",
         "data": {
-          "phones": "Telefoni",
-          "disconnect_grace": "Tempo minimo prima del parcheggio",
-          "fix_timeout": "Durata della richiesta di posizione",
-          "max_accuracy": "Precisione sufficiente",
-          "live_min_interval": "Secondi minimi tra gli aggiornamenti in tempo reale"
+          "phones": "Telefoni consentiti (lista bianca)",
+          "disconnect_grace": "Tolleranza di riconnessione",
+          "fix_timeout": "Timeout della posizione",
+          "max_accuracy": "Precisione minima"
         },
         "data_description": {
-          "phones": "Solo questi telefoni spostano i veicoli. Lascia vuoto per consentire qualsiasi telefono con il sensore di connessione Bluetooth attivo.",
-          "disconnect_grace": "La posizione viene richiesta appena si disconnette l'ultimo telefono. Il veicolo viene parcheggiato solo dopo questo tempo, così brevi interruzioni e riavvii del motore non lo parcheggiano.",
+          "phones": "Solo questi telefoni possono spostare i dispositivi. Lascia vuoto per consentire ogni telefono con il sensore di connessione Bluetooth attivo.",
+          "disconnect_grace": "La posizione viene richiesta appena si disconnette l'ultimo telefono. Il dispositivo viene parcheggiato solo trascorso questo tempo, così un breve calo o un riavvio del motore (il telefono si riconnette nel frattempo) non lo parcheggia.",
           "fix_timeout": "Per quanto tempo continuare a cercare una posizione precisa dopo la disconnessione prima di usare la migliore disponibile (predefinito 5 minuti).",
-          "max_accuracy": "Una posizione precisa almeno quanto questo valore (metri) viene accettata come parcheggio. Vince la prima che arriva.",
-          "live_min_interval": "Limite per la posizione in tempo reale durante la guida. 0 segue ogni aggiornamento."
+          "max_accuracy": "Una posizione precisa almeno quanto questo valore (metri) viene accettata come parcheggio. Vince la prima che arriva."
         }
       }
     }
@@ -103,7 +101,7 @@
     },
     "sensor": {
       "last_driver": {
-        "name": "Ultimo conducente"
+        "name": "Ultimo guidatore"
       },
       "parked_since": {
         "name": "Parcheggiato dal"
@@ -126,7 +124,7 @@
   "services": {
     "set_location": {
       "name": "Imposta posizione",
-      "description": "Sposta un veicolo alle coordinate indicate.",
+      "description": "Sposta un dispositivo alle coordinate indicate.",
       "fields": {
         "location": {
           "name": "Posizione",
@@ -138,7 +136,7 @@
   "issues": {
     "no_bluetooth_sensor": {
       "title": "Nessun telefono con il sensore di connessione Bluetooth",
-      "description": "Nessun telefono con l'app Companion ha attivo il sensore **Connessione Bluetooth**, quindi i veicoli non possono essere tracciati. Attivalo nell'app Android (Impostazioni → App Companion → Gestisci sensori → Connessione Bluetooth) e, se serve, nelle impostazioni dell'entità in Home Assistant. iOS non offre questo sensore."
+      "description": "Nessun telefono con l'app Companion ha attivo il sensore **Connessione Bluetooth**, quindi i dispositivi non possono essere tracciati. Attivalo nell'app Android (Impostazioni → App Companion → Gestisci sensori → Connessione Bluetooth) e, se serve, nelle impostazioni dell'entità in Home Assistant. iOS non offre questo sensore."
     }
   }
 }
