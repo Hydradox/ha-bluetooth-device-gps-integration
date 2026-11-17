@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.1.0](https://github.com/Hydradox/ha-bluetooth-device-gps-integration/compare/v1.0.1...v1.1.0) (2026-11-17)
+
+### Features
+
+* mac address naming ([64ff6f9](https://github.com/Hydradox/ha-bluetooth-device-gps-integration/commit/64ff6f962599a9b89b4e1d4123add9eaea4c44e7))
+* map person entity as last driver if possible ([3263ccd](https://github.com/Hydradox/ha-bluetooth-device-gps-integration/commit/3263ccd4dd32ab56084946554ff5c87cecf91a92))
+
+### Documentation
+
+* marketplace button ([42b22d2](https://github.com/Hydradox/ha-bluetooth-device-gps-integration/commit/42b22d2b5c6f42155941084bcf473e7bf5b7d3a9))
+
 ## [1.0.1](https://github.com/Hydradox/ha-bluetooth-device-gps-integration/compare/v1.0.0...v1.0.1) (2026-11-17)
 
 ### Bug fixes
