@@ -16,7 +16,13 @@ from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers import entity_registry as er
 from homeassistant.util import slugify
 
-from .const import BT_ATTR_CONNECTED, BT_ATTR_PAIRED, BT_SENSOR_SUFFIX, REQUEST_LOCATION_MESSAGE
+from .const import (
+    BT_ATTR_CONNECTED,
+    BT_ATTR_CONNECTED_PREFIX,
+    BT_ATTR_PAIRED,
+    BT_SENSOR_SUFFIX,
+    REQUEST_LOCATION_MESSAGE,
+)
 from .helpers import parse_macs
 
 if TYPE_CHECKING:
@@ -92,10 +98,14 @@ class AndroidCompanionProvider(PhoneProvider):
         return phones
 
     def parse_connected(self, state: State) -> set[str] | None:
-        """Read `connected_paired_devices`; unavailable/unknown keep the previous value."""
+        """Read the `connected_*` lists; unavailable/unknown keep the previous value."""
         if state.state in (STATE_UNAVAILABLE, STATE_UNKNOWN):
             return None
-        return parse_macs(state.attributes.get(BT_ATTR_CONNECTED))
+        connected: set[str] = set()
+        for key, value in state.attributes.items():
+            if key.startswith(BT_ATTR_CONNECTED_PREFIX):  # paired and not paired
+                connected |= parse_macs(value)
+        return connected
 
     def known_devices(self, state: State) -> dict[str, str]:
         """Paired and connected devices; the format is `MAC (name)` or `name (MAC)`."""

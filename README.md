@@ -2,6 +2,8 @@
 
 > Remember where your vehicles are parked: a vehicle follows the phone connected to its Bluetooth address and stays at the last good GPS fix when the phone disconnects.
 
+Available in English (default and fallback), Dutch, French, German, Italian, Norwegian (Bokmål), Polish, Portuguese, Spanish, Swedish and Danish.
+
 [![Add to HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=Hydradox&repository=ha-bluetooth-device-gps-integration&category=integration)
 
 ## Installation
@@ -17,7 +19,11 @@
 
 Copy `custom_components/bluetooth_device_gps` into the `custom_components` folder of your Home Assistant configuration and restart.
 
-Available in English (default and fallback), Dutch, French, German, Italian, Norwegian (Bokmål), Polish, Portuguese, Spanish, Swedish and Danish.
+## Quick start
+
+1. On each Android phone enable the **Bluetooth connection** sensor in the Companion app (*Settings → Companion app → Manage sensors*) and allow location access.
+2. Add the integration, then **Add vehicle**: name, the car's Bluetooth address (pick it from the list your phones know) and an optional picture.
+3. Drive. The vehicle follows your phone while connected and stays where you parked.
 
 ## How it works
 
@@ -28,7 +34,7 @@ Available in English (default and fallback), Dutch, French, German, Italian, Nor
 
 ## Requirements
 
-- Android phones with the Companion app. Enable the **Bluetooth connection** sensor in the app (*Settings → Companion app → Manage sensors*). iOS has no equivalent sensor, so it is not supported.
+- Android phones with the Companion app and its **Bluetooth connection** sensor enabled (it is disabled by default). iOS has no equivalent sensor, so it is not supported yet. A repair notice appears if no phone has the sensor.
 - Location permission and a GPS-reporting device tracker on the phone.
 
 ## Configuration
@@ -72,6 +78,7 @@ To place a vehicle by hand (for example after a phone ran out of battery) use ei
 
 ## Known limitations
 
+- The Companion app's location request is best effort (the app documents it as "hit or miss", about 5 s, and only while the app runs or is in the background). That is why the integration keeps retrying and falls back to the last live position.
 - Home Assistant only sees when the phone *reports*: if the phone has no data connection in an underground garage, the disconnect and the new fix arrive late and the vehicle may be parked where the phone got signal again. Place the vehicle on the map to correct it.
 - Changing a vehicle or the options reloads the integration; parked positions are kept.
 

@@ -55,6 +55,7 @@ SOURCE_MANUAL = "manual"
 
 BT_SENSOR_SUFFIX = "bluetooth_connection"
 BT_ATTR_CONNECTED = "connected_paired_devices"
+BT_ATTR_CONNECTED_PREFIX = "connected_"  # also covers connected_not_paired_devices
 BT_ATTR_PAIRED = "paired_devices"
 REQUEST_LOCATION_MESSAGE = "request_location_update"
 

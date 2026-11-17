@@ -1,11 +1,14 @@
 from datetime import UTC, datetime, timedelta
 
+from homeassistant.core import State
+
 from custom_components.bluetooth_device_gps.helpers import (
     Fix,
     normalize_mac,
     parse_macs,
     pick_best_fix,
 )
+from custom_components.bluetooth_device_gps.providers import AndroidCompanionProvider
 
 NOW = datetime(2026, 1, 1, tzinfo=UTC)
 
@@ -35,3 +38,20 @@ def test_pick_best_fix():
     assert pick_best_fix([old_exact, new_exact, coarse, unknown]) is new_exact
     assert pick_best_fix([coarse, unknown]) is coarse
     assert pick_best_fix([]) is None
+
+
+def test_android_provider_reads_every_connected_list():
+    provider = AndroidCompanionProvider()
+    state = State(
+        "sensor.pixel_bluetooth_connection",
+        "2",
+        {
+            "connected_paired_devices": ["00:0E:9F:7F:77:DC (Car)"],
+            "connected_not_paired_devices": ["Beacon (aa:bb:cc:dd:ee:ff)"],
+            "paired_devices": ["11:22:33:44:55:66 (Headset)"],
+        },
+    )
+    assert provider.parse_connected(state) == {"00:0E:9F:7F:77:DC", "AA:BB:CC:DD:EE:FF"}
+    assert provider.parse_connected(State("sensor.x", "unavailable")) is None
+    assert provider.parse_connected(State("sensor.x", "0")) == set()
+    assert "11:22:33:44:55:66" in provider.known_devices(state)
