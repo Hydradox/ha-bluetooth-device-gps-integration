@@ -3,7 +3,7 @@
     "step": {
       "user": {
         "title": "Set up Bluetooth Device GPS",
-        "description": "Track vehicles with the Bluetooth connection and location of the Home Assistant Companion app. Vehicles are added afterwards with the **Add vehicle** button."
+        "description": "Track devices with the Bluetooth connection and location of the Home Assistant Companion app. Devices are added afterwards with the **Add device** button."
       }
     },
     "abort": {
@@ -12,15 +12,15 @@
   },
   "config_subentries": {
     "vehicle": {
-      "entry_type": "Vehicle",
+      "entry_type": "Device",
       "initiate_flow": {
-        "user": "Add vehicle",
-        "reconfigure": "Reconfigure vehicle"
+        "user": "Add device",
+        "reconfigure": "Reconfigure device"
       },
       "step": {
         "user": {
-          "title": "Add vehicle",
-          "description": "The vehicle follows the phone connected to any of its Bluetooth addresses and stays where it was parked when the phone disconnects.",
+          "title": "Add device",
+          "description": "The device follows the phone connected to any of its Bluetooth addresses and stays where it was parked when the phone disconnects.",
           "data": {
             "name": "Name",
             "macs": "Bluetooth addresses",
@@ -32,8 +32,8 @@
           }
         },
         "edit_vehicle": {
-          "title": "Edit vehicle",
-          "description": "The vehicle follows the phone connected to any of its Bluetooth addresses and stays where it was parked when the phone disconnects.",
+          "title": "Edit device",
+          "description": "The device follows the phone connected to any of its Bluetooth addresses and stays where it was parked when the phone disconnects.",
           "data": {
             "name": "Name",
             "macs": "Bluetooth addresses",
@@ -45,7 +45,7 @@
           }
         },
         "reconfigure": {
-          "title": "Reconfigure vehicle",
+          "title": "Reconfigure device",
           "description": "What do you want to do?",
           "menu_options": {
             "edit_vehicle": "Edit name, addresses and picture",
@@ -54,7 +54,7 @@
         },
         "set_location": {
           "title": "Set the location",
-          "description": "Place the vehicle on the map. It is moved right away and keeps following phones as usual afterwards.",
+          "description": "Place the device on the map. It is moved right away and keeps following phones as usual afterwards.",
           "data": {
             "location": "Location"
           }
@@ -63,11 +63,11 @@
       "error": {
         "invalid_mac": "One of the addresses is not a valid MAC address.",
         "no_macs": "Add at least one Bluetooth address.",
-        "mac_in_use": "An address is already used by another vehicle.",
+        "mac_in_use": "An address is already used by another device.",
         "invalid_picture": "The picture must be a JPEG, PNG, GIF or WebP image of at most 10 MB."
       },
       "abort": {
-        "reconfigure_successful": "Vehicle updated.",
+        "reconfigure_successful": "Device updated.",
         "location_set": "Location updated.",
         "not_loaded": "The integration is not loaded yet, try again in a moment."
       }
@@ -77,20 +77,18 @@
     "step": {
       "init": {
         "title": "Bluetooth Device GPS options",
-        "description": "Settings shared by every vehicle.",
+        "description": "Settings shared by every device.",
         "data": {
-          "phones": "Phones",
-          "disconnect_grace": "Minimum time before parking",
-          "fix_timeout": "Location request duration",
-          "max_accuracy": "Good enough accuracy",
-          "live_min_interval": "Minimum seconds between live updates"
+          "phones": "Allowed phones (whitelist)",
+          "disconnect_grace": "Reconnection tolerance",
+          "fix_timeout": "Location timeout",
+          "max_accuracy": "Minimum accuracy"
         },
         "data_description": {
-          "phones": "Only these phones move vehicles. Leave empty to allow every phone with the Bluetooth connection sensor enabled.",
-          "disconnect_grace": "The location is requested the moment the last phone disconnects. The vehicle is only parked after this time, so short drops and engine restarts do not park it.",
-          "fix_timeout": "How long to keep trying to get an accurate fix after the disconnect before using the best one available (default 5 minutes).",
-          "max_accuracy": "A fix at least this accurate (metres) is accepted as the parking spot. The first one that arrives wins.",
-          "live_min_interval": "Throttle for the live position while driving. 0 follows every update."
+          "phones": "Only these phones can move devices. Leave empty to allow every phone with the Bluetooth connection sensor enabled.",
+          "disconnect_grace": "The location is requested the moment the last phone disconnects. The device is only parked once this time has passed, so a short drop or an engine restart (the phone reconnecting in between) does not park it.",
+          "fix_timeout": "How long to keep trying to get an accurate location after the disconnect before using the best one available (default 5 minutes).",
+          "max_accuracy": "A location at least this accurate (metres) is accepted as the parking spot. The first one that arrives wins."
         }
       }
     }
@@ -126,7 +124,7 @@
   "services": {
     "set_location": {
       "name": "Set location",
-      "description": "Moves a vehicle to the given coordinates.",
+      "description": "Moves a device to the given coordinates.",
       "fields": {
         "location": {
           "name": "Location",
@@ -138,7 +136,7 @@
   "issues": {
     "no_bluetooth_sensor": {
       "title": "No phone with the Bluetooth connection sensor",
-      "description": "No Companion app phone has an enabled **Bluetooth connection** sensor, so vehicles cannot be tracked. Enable it in the Android app (Settings → Companion app → Manage sensors → Bluetooth connection) and, if needed, in the entity settings in Home Assistant. iOS does not provide this sensor."
+      "description": "No Companion app phone has an enabled **Bluetooth connection** sensor, so devices cannot be tracked. Enable it in the Android app (Settings → Companion app → Manage sensors → Bluetooth connection) and, if needed, in the entity settings in Home Assistant. iOS does not provide this sensor."
     }
   }
 }

@@ -36,7 +36,6 @@ from homeassistant.helpers.selector import (
 from .const import (
     CONF_DISCONNECT_GRACE,
     CONF_FIX_TIMEOUT,
-    CONF_LIVE_MIN_INTERVAL,
     CONF_LOCATION,
     CONF_MACS,
     CONF_MAX_ACCURACY,
@@ -44,7 +43,6 @@ from .const import (
     CONF_PICTURE,
     DEFAULT_DISCONNECT_GRACE,
     DEFAULT_FIX_TIMEOUT,
-    DEFAULT_LIVE_MIN_INTERVAL,
     DEFAULT_MAX_ACCURACY,
     DOMAIN,
     SUBENTRY_VEHICLE,
@@ -126,10 +124,6 @@ class GlobalOptionsFlow(OptionsFlow):
                         min=5, max=500, step=1, mode=NumberSelectorMode.BOX, unit_of_measurement="m"
                     )
                 ),
-                vol.Required(
-                    CONF_LIVE_MIN_INTERVAL,
-                    default=options.get(CONF_LIVE_MIN_INTERVAL, DEFAULT_LIVE_MIN_INTERVAL),
-                ): _seconds(0, 600),
             }
         )
         return self.async_show_form(step_id="init", data_schema=schema)

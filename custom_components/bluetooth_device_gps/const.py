@@ -27,12 +27,10 @@ CONF_PHONES = "phones"
 CONF_FIX_TIMEOUT = "fix_timeout"
 CONF_MAX_ACCURACY = "max_accuracy"
 CONF_DISCONNECT_GRACE = "disconnect_grace"
-CONF_LIVE_MIN_INTERVAL = "live_min_interval"
 
 DEFAULT_FIX_TIMEOUT = 300
 DEFAULT_MAX_ACCURACY = 50
 DEFAULT_DISCONNECT_GRACE = 20
-DEFAULT_LIVE_MIN_INTERVAL = 0
 
 # A live fix older than this (seconds before the disconnect) is not trusted as the parking spot.
 LIVE_FIX_MAX_AGE = 120

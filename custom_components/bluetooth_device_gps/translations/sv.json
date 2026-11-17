@@ -3,7 +3,7 @@
     "step": {
       "user": {
         "title": "Konfigurera Bluetooth Device GPS",
-        "description": "Följ fordon med Bluetooth-anslutningen och positionen från appen Home Assistant Companion. Fordon läggs till efteråt med knappen **Lägg till fordon**."
+        "description": "Följ enheter med Bluetooth-anslutningen och positionen från appen Home Assistant Companion. Enheter läggs till efteråt med knappen **Lägg till enhet**."
       }
     },
     "abort": {
@@ -12,15 +12,15 @@
   },
   "config_subentries": {
     "vehicle": {
-      "entry_type": "Fordon",
+      "entry_type": "Enhet",
       "initiate_flow": {
-        "user": "Lägg till fordon",
-        "reconfigure": "Konfigurera om fordon"
+        "user": "Lägg till enhet",
+        "reconfigure": "Konfigurera enheten igen"
       },
       "step": {
         "user": {
-          "title": "Lägg till fordon",
-          "description": "Fordonet följer telefonen som är ansluten till någon av dess Bluetooth-adresser och står kvar där det parkerades när telefonen kopplas från.",
+          "title": "Lägg till enhet",
+          "description": "Enheten följer telefonen som är ansluten till någon av dess Bluetooth-adresser och blir stående där den parkerades när telefonen kopplas från.",
           "data": {
             "name": "Namn",
             "macs": "Bluetooth-adresser",
@@ -32,8 +32,8 @@
           }
         },
         "edit_vehicle": {
-          "title": "Redigera fordon",
-          "description": "Fordonet följer telefonen som är ansluten till någon av dess Bluetooth-adresser och står kvar där det parkerades när telefonen kopplas från.",
+          "title": "Redigera enhet",
+          "description": "Enheten följer telefonen som är ansluten till någon av dess Bluetooth-adresser och blir stående där den parkerades när telefonen kopplas från.",
           "data": {
             "name": "Namn",
             "macs": "Bluetooth-adresser",
@@ -45,7 +45,7 @@
           }
         },
         "reconfigure": {
-          "title": "Konfigurera om fordon",
+          "title": "Konfigurera enheten igen",
           "description": "Vad vill du göra?",
           "menu_options": {
             "edit_vehicle": "Redigera namn, adresser och bild",
@@ -54,7 +54,7 @@
         },
         "set_location": {
           "title": "Ange position",
-          "description": "Placera fordonet på kartan. Det flyttas direkt och följer sedan telefoner som vanligt igen.",
+          "description": "Placera enheten på kartan. Den flyttas direkt och följer sedan telefoner som vanligt igen.",
           "data": {
             "location": "Position"
           }
@@ -63,11 +63,11 @@
       "error": {
         "invalid_mac": "En av adresserna är inte en giltig MAC-adress.",
         "no_macs": "Lägg till minst en Bluetooth-adress.",
-        "mac_in_use": "En adress används redan av ett annat fordon.",
+        "mac_in_use": "En adress används redan av en annan enhet.",
         "invalid_picture": "Bilden måste vara en JPEG-, PNG-, GIF- eller WebP-bild på högst 10 MB."
       },
       "abort": {
-        "reconfigure_successful": "Fordonet uppdaterat.",
+        "reconfigure_successful": "Enheten uppdaterad.",
         "location_set": "Positionen uppdaterad.",
         "not_loaded": "Integrationen är inte laddad än, försök igen om en stund."
       }
@@ -77,20 +77,18 @@
     "step": {
       "init": {
         "title": "Alternativ för Bluetooth Device GPS",
-        "description": "Inställningar som delas av alla fordon.",
+        "description": "Inställningar som gäller alla enheter.",
         "data": {
-          "phones": "Telefoner",
-          "disconnect_grace": "Minsta tid före parkering",
-          "fix_timeout": "Varaktighet för positionsbegäran",
-          "max_accuracy": "Tillräcklig noggrannhet",
-          "live_min_interval": "Minsta antal sekunder mellan liveuppdateringar"
+          "phones": "Tillåtna telefoner (vitlista)",
+          "disconnect_grace": "Tolerans för återanslutning",
+          "fix_timeout": "Tidsgräns för position",
+          "max_accuracy": "Minsta noggrannhet"
         },
         "data_description": {
-          "phones": "Endast dessa telefoner flyttar fordon. Lämna tomt för att tillåta alla telefoner med aktiverad Bluetooth-anslutningssensor.",
-          "disconnect_grace": "Positionen begärs så fort den sista telefonen kopplas från. Fordonet parkeras först efter den här tiden, så att korta avbrott och motoromstarter inte parkerar det.",
+          "phones": "Bara dessa telefoner kan flytta enheter. Lämna tomt för att tillåta alla telefoner med sensorn för Bluetooth-anslutning aktiverad.",
+          "disconnect_grace": "Positionen begärs så fort den sista telefonen kopplas från. Enheten parkeras först när den här tiden har gått, så ett kort avbrott eller en motorstart (telefonen ansluter igen under tiden) parkerar den inte.",
           "fix_timeout": "Hur länge man fortsätter försöka få en exakt position efter frånkopplingen innan den bästa tillgängliga används (standard 5 minuter).",
-          "max_accuracy": "En position som är minst så exakt (i meter) godtas som parkeringsplats. Den första som kommer in vinner.",
-          "live_min_interval": "Begränsning av livepositionen under körning. 0 följer varje uppdatering."
+          "max_accuracy": "En position som är minst så exakt (i meter) godtas som parkeringsplats. Den första som kommer in vinner."
         }
       }
     }
@@ -126,7 +124,7 @@
   "services": {
     "set_location": {
       "name": "Ange position",
-      "description": "Flyttar ett fordon till de angivna koordinaterna.",
+      "description": "Flyttar en enhet till de angivna koordinaterna.",
       "fields": {
         "location": {
           "name": "Position",
@@ -138,7 +136,7 @@
   "issues": {
     "no_bluetooth_sensor": {
       "title": "Ingen telefon med Bluetooth-anslutningssensorn",
-      "description": "Ingen telefon med Companion-appen har sensorn **Bluetooth-anslutning** aktiverad, så fordon kan inte följas. Aktivera den i Android-appen (Inställningar → Companion-appen → Hantera sensorer → Bluetooth-anslutning) och vid behov i entitetsinställningarna i Home Assistant. iOS har inte den här sensorn."
+      "description": "Ingen telefon med Companion-appen har sensorn **Bluetooth-anslutning** aktiverad, så enheter kan inte följas. Aktivera den i Android-appen (Inställningar → Companion-appen → Hantera sensorer → Bluetooth-anslutning) och vid behov i entitetsinställningarna i Home Assistant. iOS har inte den här sensorn."
     }
   }
 }
