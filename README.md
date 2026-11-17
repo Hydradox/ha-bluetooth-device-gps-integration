@@ -4,16 +4,11 @@
 
 Available in English (default and fallback), Dutch, French, German, Italian, Norwegian (Bokmål), Polish, Portuguese, Spanish, Swedish and Danish.
 
-[![Add to HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=Hydradox&repository=ha-bluetooth-device-gps-integration&category=integration)
-
 ## Installation
 
-### HACS (recommended)
+### Marketplace (recommended)
 
-1. In Home Assistant open **HACS**, menu (⋮) → **Custom repositories**.
-2. Add `https://github.com/Hydradox/ha-bluetooth-device-gps-integration` with category **Integration**.
-3. Search for **Bluetooth Device GPS**, download it and restart Home Assistant.
-4. **Settings → Devices & services → Add integration → Bluetooth Device GPS**.
+[![Add to HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=Hydradox&repository=ha-bluetooth-device-gps-integration&category=integration)
 
 ### Manual
 
