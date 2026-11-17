@@ -304,6 +304,15 @@ class BluetoothGpsManager:
             self._evaluate(vehicle)
 
     @callback
+    def _driver_name(self, phone: Phone) -> str:
+        """Name of the person who owns the phone's tracker, falling back to the phone's name."""
+        if phone.tracker_id:
+            for state in self.hass.states.async_all("person"):
+                if phone.tracker_id in (state.attributes.get("device_trackers") or []):
+                    return state.name
+        return phone.name
+
+    @callback
     def _evaluate(self, vehicle: Vehicle) -> None:
         """Compare the current holders with the previous ones and move the state machine."""
         now = dt_util.utcnow()
@@ -320,7 +329,7 @@ class BluetoothGpsManager:
             vehicle.departures.clear()
             joined = holders - previous
             if joined:
-                vehicle.last_driver = self._phones[min(joined)].name
+                vehicle.last_driver = self._driver_name(self._phones[min(joined)])
             changed = bool(joined) or previous != holders
             departed = vehicle.phase == PHASE_PARKED
             if vehicle.phase != PHASE_CONNECTED:

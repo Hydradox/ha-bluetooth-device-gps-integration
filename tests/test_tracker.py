@@ -253,6 +253,19 @@ async def test_two_phones_park_only_when_last_one_leaves(hass, freezer, notify_c
     assert len(notify_calls) >= 1
 
 
+async def test_last_driver_prefers_the_person_entity(hass):
+    _, (phone,) = await _setup(hass, "pixel")
+    hass.states.async_set(
+        "person.ana",
+        "home",
+        {"friendly_name": "Ana", "device_trackers": [phone.tracker_id]},
+    )
+    phone.bluetooth(CAR_ATTR)
+    await hass.async_block_till_done()
+    assert hass.states.get(TRACKER).attributes["last_driver"] == "Ana"
+    assert hass.states.get("sensor.car_last_driver").state == "Ana"
+
+
 async def test_unavailable_sensor_is_not_a_disconnect(hass, freezer, notify_calls):
     _, (phone,) = await _setup(hass, "pixel")
     phone.location(40.0, -3.0)
