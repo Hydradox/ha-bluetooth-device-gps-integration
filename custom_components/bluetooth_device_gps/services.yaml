@@ -1,0 +1,12 @@
+set_location:
+  target:
+    entity:
+      integration: bluetooth_device_gps
+      domain: device_tracker
+  fields:
+    location:
+      required: true
+      selector:
+        location:
+          radius: true
+          icon: mdi:car

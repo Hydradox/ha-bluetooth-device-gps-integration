@@ -1,5 +1,5 @@
 [project]
-name = "integration-template"
+name = "bluetooth-device-gps"
 version = "0.0.0" # unused: the release version lives in manifest.json (set by semantic-release)
 description = "Home Assistant custom integration distributed through HACS"
 requires-python = ">=3.14"

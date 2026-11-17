@@ -7,7 +7,7 @@ if (!domain) throw new Error("Pass the integration domain as the second argument
 const clientId = `${base}/`;
 const USER = { name: "Dev", username: "dev", password: "dev", language: "en" };
 // Answers for the first config flow step. Adapt them to the fields of your config flow.
-const FLOW_INPUT = { name: "Dev" };
+const FLOW_INPUT = {}; // the hub step asks for nothing; add vehicles from the UI (Add vehicle)
 
 const json = async (path, init = {}) => {
   const response = await fetch(base + path, init);

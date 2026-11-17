@@ -21,4 +21,4 @@ logger:
   default: warning
   logs:
     # The domain is replaced by scripts/init.py
-    custom_components.integration_template: debug
+    custom_components.bluetooth_device_gps: debug

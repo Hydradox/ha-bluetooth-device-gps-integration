@@ -6,16 +6,6 @@ Guidance for Claude Code (claude.ai/code) in this repository.
 
 > **Everything is written in English**: code, log/error messages, comments, docstrings, docs (README, CLAUDE.md, CHANGELOG), commits, PR titles/descriptions, issue templates, whatever language the conversation uses. Only `custom_components/<domain>/translations/<lang>.json` hold other languages (`en.json` is the source).
 
-<!-- template:start -->
-## Template only
-
-Template for HACS integrations (category `integration`) with a working example (`integration_template`: config flow, coordinator, one sensor). `scripts/init.py` turns it into a real integration: renames the domain, replaces placeholders, writes a fresh README, deletes `scripts/init.py`, `scripts/README.template.md`, `.github/workflows/template-check.yml` and this section.
-
-- `template-check.yml` runs `init.py` on a copy and lints/tests it. Any new *kind* of placeholder (`integration_template`, `integration-template`, `IntegrationTemplate`, `Integration Template`, `Hydradox`, `ha-template-integration-hacs`) needs an entry in `scripts/init.py`.
-- The release job is skipped when `github.event.repository.is_template`, so the repo must be marked as a template in settings.
-- The card template (category `plugin`) is a separate repo: no card or Node-build concerns here.
-<!-- template:end -->
-
 ## Documentation sources
 
 Home Assistant APIs change fast: check the real thing before relying on memory.
@@ -30,7 +20,21 @@ Fetch these with WebFetch/WebSearch when unsure, and write down any lasting find
 
 ## Project status
 
-`integration_template` is a Home Assistant custom integration distributed through GitHub and HACS. Replace this with what it does and keep it current: supported devices/APIs, entities and services, config/options flow fields, what is verified in real Home Assistant, known gaps.
+`bluetooth_device_gps` (hub, `single_config_entry`) makes vehicles follow Companion app phones over Bluetooth. See the README for user-facing behaviour; this is what the code does not show.
+
+- **Structure**: one hub entry (options flow = global settings) and one `vehicle` config subentry per vehicle (name, MACs, picture file name). Entities are attached with `config_subentry_id=`. Any options/subentry change reloads the entry through an update listener (so the options flow is a plain `OptionsFlow`, not `OptionsFlowWithReload`).
+- **Runtime** (`tracker.py`): `BluetoothGpsManager` in `entry.runtime_data`, push only. Phones are discovered from the entity registry (`mobile_app` sensor whose unique_id ends in `bluetooth_connection`, plus the `device_tracker` of the same device). Every Bluetooth event recomputes each vehicle's holders (`vehicle.macs & phone.connected`), which makes restart recovery and flaps idempotent. Phases: `connected` → `settling` (grace debounce, then fix collection) → `parked`. `unavailable`/`unknown` sensor states never count as a disconnect.
+- **Persistence**: vehicle state is saved with `helpers.storage.Store` (not `RestoreEntity`) so the manager can recover before entities exist. A vehicle restored as `connected`/`settling` with no holder goes through the normal grace + settle path.
+- **Fix rules**: on the last disconnect the request is sent immediately (waiting would let the user walk away from the car) and fixes are collected until `fix_timeout` (default 300 s). A fix counts only if it arrived strictly after the disconnect. The first fix at or under `max_accuracy` becomes the `candidate` and later ones never replace it (the user is walking away by then). Parking happens when a candidate exists **and** `disconnect_grace` (minimum time, default 20 s, only guards flaps/restarts) has elapsed; at timeout the best of collected and the recent live fix (`LIVE_FIX_MAX_AGE`) is used; with none the old position is kept (`location_source: stale`). A reconnect at any point cancels the settle.
+- **Events**: `Vehicle.fire_event` feeds the `event` entity. `parked` fires at the end of `_finish_settle` (final location); `departed` only when a vehicle goes `parked` → `connected`, never for a settling → connected flap.
+- **Translations**: `en.json` is the source and the fallback; `es`, `nl`, `de`, `fr`, `it`, `pl`, `sv`, `da`, `nb` (Norwegian Bokmål, HA's code for Norwegian) and `pt` mirror it key for key. `tests/test_translations.py` fails when a language misses or adds a key, loses `**` markdown or the example MAC, so when a string changes update every file. Setup text refers to the **Add vehicle** button by its translated label.
+- **Providers** (`providers.py`): everything specific to a kind of phone sits behind `PhoneProvider` (`discover`, `parse_connected`, `known_devices`, `async_request_location`) and is listed in `PROVIDERS`. Today only `AndroidCompanionProvider`; a new source (e.g. iOS, if it ever exposes connected Bluetooth devices) is one class plus an entry in `PROVIDERS`, with no change in the manager, flow or entities. The options phone selector filters on each provider's `integration`.
+- **Notify service** (Android provider): resolved from the device registry on every request (`notify.mobile_app_<slug of the config entry's device_name>`), without importing `mobile_app` (its import chain needs packages missing from the test env; it is only in `after_dependencies`).
+- **Manual location**: Reconfigure opens a menu (`edit_vehicle` / `set_location`). `set_location` uses HA's `LocationSelector` map and calls `manager.async_set_location` (no reload, `location_source: manual`); the `set_location` entity service takes the same selector value. The next connect/disconnect overrides it.
+- **Pictures**: stored under `<config>/bluetooth_device_gps/pictures/<random>.ext` after a magic-byte check, served from a static path (no auth, so the name is random); unreferenced files are deleted on setup.
+- **Timers**: callbacks given to `async_call_later` must be `@callback`/`callback(...)`, otherwise Home Assistant runs them in the executor.
+- **Not verified yet**: the exact format of the Android `connected_paired_devices` attribute (parsed by regex so `MAC (name)` and `name (MAC)` both work) and the behaviour with a real phone and the dev container (`dev/ha.sh`). Tests use fake registry entries and states.
+- **Deliberately not built**: a "refresh" service (it would park the vehicle at the phone's current position, wherever that is) and iOS support (the Companion app for iOS has no Bluetooth sensor; add a provider if that changes).
 
 ## Commands
 
