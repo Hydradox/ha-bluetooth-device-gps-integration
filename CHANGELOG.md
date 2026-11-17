@@ -1,5 +1,11 @@
 # Changelog
 
+## [1.0.1](https://github.com/Hydradox/ha-bluetooth-device-gps-integration/compare/v1.0.0...v1.0.1) (2026-11-17)
+
+### Bug fixes
+
+* translations, icon and minor tweaks ([7b35bae](https://github.com/Hydradox/ha-bluetooth-device-gps-integration/commit/7b35baec479aeb9952094d90ae4c1cd696a05bab))
+
 ## 1.0.0 (2026-11-17)
 
 ### Features
