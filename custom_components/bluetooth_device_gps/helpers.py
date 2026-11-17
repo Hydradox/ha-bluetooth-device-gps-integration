@@ -49,6 +49,12 @@ def parse_macs(value: str | Iterable[object] | None) -> set[str]:
     return macs
 
 
+def device_label(item: str, mac: str) -> str:
+    """Label `name (MAC)` from an app entry written as `MAC (name)` or `name (MAC)`."""
+    name = MAC_SEARCH_RE.sub("", item).strip(" ()[]-:")
+    return f"{name} ({mac})" if name else mac
+
+
 def fix_from_state(state: State | None) -> Fix | None:
     """Build a fix from a device_tracker state, or None when it has no usable coordinates."""
     if state is None or state.state in (STATE_UNAVAILABLE, STATE_UNKNOWN):

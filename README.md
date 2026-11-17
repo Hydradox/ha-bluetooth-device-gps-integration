@@ -59,7 +59,7 @@ Per device (one device):
 
 | Entity | Description |
 | ------ | ----------- |
-| `device_tracker.<device>` | GPS position. Attributes: `phase` (`connected`, `settling`, `parked`), `location_source` (`live`, `requested_fix`, `last_live`, `stale`, `manual`), `last_driver`, `fix_time` |
+| `device_tracker.<device>` | GPS position. Attributes: `phase` (`connected`, `settling`, `parked`), `location_source` (`live`, `requested_fix`, `last_live`, `stale`, `manual`, `home`), `last_driver`, `fix_time` |
 | `binary_sensor.<device>_connected` | On while a phone is connected to the device |
 | `event.<device>_activity` | Fires `parked` (when the final location is known) and `departed` (when a phone connects to a parked device). Attributes: `latitude`, `longitude`, `accuracy`, `location_source`, `last_driver`, `parked_at`. Use it as an automation trigger, for example to notify where you parked |
 | `sensor.<device>_last_driver` | Person (the `person` entity that has the phone's `device_tracker`) who connected last; falls back to the phone's name when no person is linked |

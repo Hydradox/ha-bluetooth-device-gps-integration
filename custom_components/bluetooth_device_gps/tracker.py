@@ -32,6 +32,7 @@ from .const import (
     PHASE_CONNECTED,
     PHASE_PARKED,
     PHASE_SETTLING,
+    SOURCE_HOME,
     SOURCE_LAST_LIVE,
     SOURCE_LIVE,
     SOURCE_MANUAL,
@@ -205,6 +206,8 @@ class BluetoothGpsManager:
                 subentry.data.get(CONF_PICTURE),
             )
             vehicle.restore(saved.get(subentry.subentry_id, {}))
+            if vehicle.fix is None:
+                self._place_at_home(vehicle)
             self.vehicles[subentry.subentry_id] = vehicle
 
         self._discover()
@@ -302,6 +305,18 @@ class BluetoothGpsManager:
         self._update_connected(phone, event.data.get("new_state"))
         for vehicle in self.vehicles.values():
             self._evaluate(vehicle)
+
+    @callback
+    def _place_at_home(self, vehicle: Vehicle) -> None:
+        """Give a brand-new vehicle the home zone as its initial location, if there is one."""
+        home = self.hass.states.get("zone.home")
+        if home is None:
+            return
+        lat, lon = home.attributes.get("latitude"), home.attributes.get("longitude")
+        if lat is None or lon is None:
+            return
+        vehicle.fix = Fix(lat, lon, home.attributes.get("radius"), dt_util.utcnow())
+        vehicle.source = SOURCE_HOME
 
     @callback
     def _driver_name(self, phone: Phone) -> str:
