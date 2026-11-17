@@ -1,5 +1,5 @@
 {
-  "name": "integration-template",
+  "name": "bluetooth-device-gps",
   "version": "0.0.0",
   "description": "Release tooling only (semantic-release, commitlint). The integration itself is Python.",
   "private": true,

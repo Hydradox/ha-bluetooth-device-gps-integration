@@ -1893,7 +1893,7 @@ wheels = [
 ]
 
 [[package]]
-name = "integration-template"
+name = "bluetooth-device-gps"
 version = "0.0.0"
 source = { virtual = "." }
 

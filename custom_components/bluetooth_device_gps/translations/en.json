@@ -1,0 +1,144 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Set up Bluetooth Device GPS",
+        "description": "Track vehicles with the Bluetooth connection and location of the Home Assistant Companion app. Vehicles are added afterwards with the **Add vehicle** button."
+      }
+    },
+    "abort": {
+      "single_instance_allowed": "Bluetooth Device GPS is already set up."
+    }
+  },
+  "config_subentries": {
+    "vehicle": {
+      "entry_type": "Vehicle",
+      "initiate_flow": {
+        "user": "Add vehicle",
+        "reconfigure": "Reconfigure vehicle"
+      },
+      "step": {
+        "user": {
+          "title": "Add vehicle",
+          "description": "The vehicle follows the phone connected to any of its Bluetooth addresses and stays where it was parked when the phone disconnects.",
+          "data": {
+            "name": "Name",
+            "macs": "Bluetooth addresses",
+            "picture": "Picture"
+          },
+          "data_description": {
+            "macs": "Pick a device known to your phones or type a MAC address such as 00:0E:9F:7F:77:DC.",
+            "picture": "Optional. Leave empty to keep the current picture."
+          }
+        },
+        "edit_vehicle": {
+          "title": "Edit vehicle",
+          "description": "The vehicle follows the phone connected to any of its Bluetooth addresses and stays where it was parked when the phone disconnects.",
+          "data": {
+            "name": "Name",
+            "macs": "Bluetooth addresses",
+            "picture": "Picture"
+          },
+          "data_description": {
+            "macs": "Pick a device known to your phones or type a MAC address such as 00:0E:9F:7F:77:DC.",
+            "picture": "Optional. Leave empty to keep the current picture."
+          }
+        },
+        "reconfigure": {
+          "title": "Reconfigure vehicle",
+          "description": "What do you want to do?",
+          "menu_options": {
+            "edit_vehicle": "Edit name, addresses and picture",
+            "set_location": "Set the location on the map"
+          }
+        },
+        "set_location": {
+          "title": "Set the location",
+          "description": "Place the vehicle on the map. It is moved right away and keeps following phones as usual afterwards.",
+          "data": {
+            "location": "Location"
+          }
+        }
+      },
+      "error": {
+        "invalid_mac": "One of the addresses is not a valid MAC address.",
+        "no_macs": "Add at least one Bluetooth address.",
+        "mac_in_use": "An address is already used by another vehicle.",
+        "invalid_picture": "The picture must be a JPEG, PNG, GIF or WebP image of at most 10 MB."
+      },
+      "abort": {
+        "reconfigure_successful": "Vehicle updated.",
+        "location_set": "Location updated.",
+        "not_loaded": "The integration is not loaded yet, try again in a moment."
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Bluetooth Device GPS options",
+        "description": "Settings shared by every vehicle.",
+        "data": {
+          "phones": "Phones",
+          "disconnect_grace": "Minimum time before parking",
+          "fix_timeout": "Location request duration",
+          "max_accuracy": "Good enough accuracy",
+          "live_min_interval": "Minimum seconds between live updates"
+        },
+        "data_description": {
+          "phones": "Only these phones move vehicles. Leave empty to allow every phone with the Bluetooth connection sensor enabled.",
+          "disconnect_grace": "The location is requested the moment the last phone disconnects. The vehicle is only parked after this time, so short drops and engine restarts do not park it.",
+          "fix_timeout": "How long to keep trying to get an accurate fix after the disconnect before using the best one available (default 5 minutes).",
+          "max_accuracy": "A fix at least this accurate (metres) is accepted as the parking spot. The first one that arrives wins.",
+          "live_min_interval": "Throttle for the live position while driving. 0 follows every update."
+        }
+      }
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "connected": {
+        "name": "Connected"
+      }
+    },
+    "sensor": {
+      "last_driver": {
+        "name": "Last driver"
+      },
+      "parked_since": {
+        "name": "Parked since"
+      }
+    },
+    "event": {
+      "activity": {
+        "name": "Activity",
+        "state_attributes": {
+          "event_type": {
+            "state": {
+              "parked": "Parked",
+              "departed": "Departed"
+            }
+          }
+        }
+      }
+    }
+  },
+  "services": {
+    "set_location": {
+      "name": "Set location",
+      "description": "Moves a vehicle to the given coordinates.",
+      "fields": {
+        "location": {
+          "name": "Location",
+          "description": "Pick the position on the map. The radius is used as the accuracy."
+        }
+      }
+    }
+  },
+  "issues": {
+    "no_bluetooth_sensor": {
+      "title": "No phone with the Bluetooth connection sensor",
+      "description": "No Companion app phone has an enabled **Bluetooth connection** sensor, so vehicles cannot be tracked. Enable it in the Android app (Settings → Companion app → Manage sensors → Bluetooth connection) and, if needed, in the entity settings in Home Assistant. iOS does not provide this sensor."
+    }
+  }
+}

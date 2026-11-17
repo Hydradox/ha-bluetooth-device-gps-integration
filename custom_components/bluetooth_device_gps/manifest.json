@@ -1,0 +1,15 @@
+{
+  "domain": "bluetooth_device_gps",
+  "name": "Bluetooth Device GPS",
+  "after_dependencies": ["mobile_app"],
+  "codeowners": ["@Hydradox"],
+  "config_flow": true,
+  "dependencies": ["file_upload", "http"],
+  "documentation": "https://github.com/Hydradox/ha-bluetooth-device-gps-integration",
+  "integration_type": "hub",
+  "iot_class": "calculated",
+  "issue_tracker": "https://github.com/Hydradox/ha-bluetooth-device-gps-integration/issues",
+  "requirements": [],
+  "single_config_entry": true,
+  "version": "0.0.0"
+}

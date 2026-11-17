@@ -1,0 +1,144 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Bluetooth Device GPS instellen",
+        "description": "Volg voertuigen met de Bluetooth-verbinding en locatie van de Home Assistant Companion-app. Voertuigen voeg je daarna toe met de knop **Voertuig toevoegen**."
+      }
+    },
+    "abort": {
+      "single_instance_allowed": "Bluetooth Device GPS is al ingesteld."
+    }
+  },
+  "config_subentries": {
+    "vehicle": {
+      "entry_type": "Voertuig",
+      "initiate_flow": {
+        "user": "Voertuig toevoegen",
+        "reconfigure": "Voertuig opnieuw configureren"
+      },
+      "step": {
+        "user": {
+          "title": "Voertuig toevoegen",
+          "description": "Het voertuig volgt de telefoon die verbonden is met een van zijn Bluetooth-adressen en blijft staan waar het geparkeerd werd wanneer de telefoon de verbinding verbreekt.",
+          "data": {
+            "name": "Naam",
+            "macs": "Bluetooth-adressen",
+            "picture": "Afbeelding"
+          },
+          "data_description": {
+            "macs": "Kies een apparaat dat je telefoons kennen of typ een MAC-adres zoals 00:0E:9F:7F:77:DC.",
+            "picture": "Optioneel. Laat leeg om de huidige afbeelding te behouden."
+          }
+        },
+        "edit_vehicle": {
+          "title": "Voertuig bewerken",
+          "description": "Het voertuig volgt de telefoon die verbonden is met een van zijn Bluetooth-adressen en blijft staan waar het geparkeerd werd wanneer de telefoon de verbinding verbreekt.",
+          "data": {
+            "name": "Naam",
+            "macs": "Bluetooth-adressen",
+            "picture": "Afbeelding"
+          },
+          "data_description": {
+            "macs": "Kies een apparaat dat je telefoons kennen of typ een MAC-adres zoals 00:0E:9F:7F:77:DC.",
+            "picture": "Optioneel. Laat leeg om de huidige afbeelding te behouden."
+          }
+        },
+        "reconfigure": {
+          "title": "Voertuig opnieuw configureren",
+          "description": "Wat wil je doen?",
+          "menu_options": {
+            "edit_vehicle": "Naam, adressen en afbeelding bewerken",
+            "set_location": "Locatie op de kaart instellen"
+          }
+        },
+        "set_location": {
+          "title": "Locatie instellen",
+          "description": "Plaats het voertuig op de kaart. Het wordt direct verplaatst en volgt daarna weer telefoons zoals gewoonlijk.",
+          "data": {
+            "location": "Locatie"
+          }
+        }
+      },
+      "error": {
+        "invalid_mac": "Een van de adressen is geen geldig MAC-adres.",
+        "no_macs": "Voeg minstens één Bluetooth-adres toe.",
+        "mac_in_use": "Een adres wordt al door een ander voertuig gebruikt.",
+        "invalid_picture": "De afbeelding moet een JPEG-, PNG-, GIF- of WebP-afbeelding van maximaal 10 MB zijn."
+      },
+      "abort": {
+        "reconfigure_successful": "Voertuig bijgewerkt.",
+        "location_set": "Locatie bijgewerkt.",
+        "not_loaded": "De integratie is nog niet geladen, probeer het zo opnieuw."
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Opties voor Bluetooth Device GPS",
+        "description": "Instellingen die voor alle voertuigen gelden.",
+        "data": {
+          "phones": "Telefoons",
+          "disconnect_grace": "Minimale tijd voor het parkeren",
+          "fix_timeout": "Duur van het locatieverzoek",
+          "max_accuracy": "Voldoende nauwkeurigheid",
+          "live_min_interval": "Minimale seconden tussen live-updates"
+        },
+        "data_description": {
+          "phones": "Alleen deze telefoons verplaatsen voertuigen. Laat leeg om elke telefoon met de ingeschakelde Bluetooth-verbindingssensor toe te staan.",
+          "disconnect_grace": "De locatie wordt opgevraagd zodra de laatste telefoon de verbinding verbreekt. Het voertuig wordt pas na deze tijd geparkeerd, zodat korte onderbrekingen en motorherstarts het niet parkeren.",
+          "fix_timeout": "Hoe lang je blijft proberen een nauwkeurige positie te krijgen na het verbreken van de verbinding voordat de beste beschikbare wordt gebruikt (standaard 5 minuten).",
+          "max_accuracy": "Een positie met minstens deze nauwkeurigheid (meter) wordt als parkeerplek geaccepteerd. De eerste die binnenkomt wint.",
+          "live_min_interval": "Beperking voor de live positie tijdens het rijden. 0 volgt elke update."
+        }
+      }
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "connected": {
+        "name": "Verbonden"
+      }
+    },
+    "sensor": {
+      "last_driver": {
+        "name": "Laatste bestuurder"
+      },
+      "parked_since": {
+        "name": "Geparkeerd sinds"
+      }
+    },
+    "event": {
+      "activity": {
+        "name": "Activiteit",
+        "state_attributes": {
+          "event_type": {
+            "state": {
+              "parked": "Geparkeerd",
+              "departed": "Vertrokken"
+            }
+          }
+        }
+      }
+    }
+  },
+  "services": {
+    "set_location": {
+      "name": "Locatie instellen",
+      "description": "Verplaatst een voertuig naar de opgegeven coördinaten.",
+      "fields": {
+        "location": {
+          "name": "Locatie",
+          "description": "Kies de positie op de kaart. De straal wordt als nauwkeurigheid gebruikt."
+        }
+      }
+    }
+  },
+  "issues": {
+    "no_bluetooth_sensor": {
+      "title": "Geen telefoon met de Bluetooth-verbindingssensor",
+      "description": "Geen enkele telefoon met de Companion-app heeft een ingeschakelde sensor **Bluetooth-verbinding**, dus voertuigen kunnen niet worden gevolgd. Schakel deze in de Android-app in (Instellingen → Companion-app → Sensoren beheren → Bluetooth-verbinding) en indien nodig in de entiteitsinstellingen in Home Assistant. iOS biedt deze sensor niet."
+    }
+  }
+}

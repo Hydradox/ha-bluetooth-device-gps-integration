@@ -1,0 +1,144 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Konfiguracja Bluetooth Device GPS",
+        "description": "Śledź pojazdy za pomocą połączenia Bluetooth i lokalizacji aplikacji Home Assistant Companion. Pojazdy dodajesz później przyciskiem **Dodaj pojazd**."
+      }
+    },
+    "abort": {
+      "single_instance_allowed": "Bluetooth Device GPS jest już skonfigurowany."
+    }
+  },
+  "config_subentries": {
+    "vehicle": {
+      "entry_type": "Pojazd",
+      "initiate_flow": {
+        "user": "Dodaj pojazd",
+        "reconfigure": "Skonfiguruj pojazd ponownie"
+      },
+      "step": {
+        "user": {
+          "title": "Dodaj pojazd",
+          "description": "Pojazd podąża za telefonem połączonym z którymś z jego adresów Bluetooth i zostaje tam, gdzie zaparkował, gdy telefon się rozłączy.",
+          "data": {
+            "name": "Nazwa",
+            "macs": "Adresy Bluetooth",
+            "picture": "Obraz"
+          },
+          "data_description": {
+            "macs": "Wybierz urządzenie znane Twoim telefonom lub wpisz adres MAC, np. 00:0E:9F:7F:77:DC.",
+            "picture": "Opcjonalnie. Zostaw puste, aby zachować obecny obraz."
+          }
+        },
+        "edit_vehicle": {
+          "title": "Edytuj pojazd",
+          "description": "Pojazd podąża za telefonem połączonym z którymś z jego adresów Bluetooth i zostaje tam, gdzie zaparkował, gdy telefon się rozłączy.",
+          "data": {
+            "name": "Nazwa",
+            "macs": "Adresy Bluetooth",
+            "picture": "Obraz"
+          },
+          "data_description": {
+            "macs": "Wybierz urządzenie znane Twoim telefonom lub wpisz adres MAC, np. 00:0E:9F:7F:77:DC.",
+            "picture": "Opcjonalnie. Zostaw puste, aby zachować obecny obraz."
+          }
+        },
+        "reconfigure": {
+          "title": "Skonfiguruj pojazd ponownie",
+          "description": "Co chcesz zrobić?",
+          "menu_options": {
+            "edit_vehicle": "Edytuj nazwę, adresy i obraz",
+            "set_location": "Ustaw lokalizację na mapie"
+          }
+        },
+        "set_location": {
+          "title": "Ustaw lokalizację",
+          "description": "Umieść pojazd na mapie. Zostanie przeniesiony od razu, a potem znów będzie podążać za telefonami jak zwykle.",
+          "data": {
+            "location": "Lokalizacja"
+          }
+        }
+      },
+      "error": {
+        "invalid_mac": "Jeden z adresów nie jest prawidłowym adresem MAC.",
+        "no_macs": "Dodaj co najmniej jeden adres Bluetooth.",
+        "mac_in_use": "Adres jest już używany przez inny pojazd.",
+        "invalid_picture": "Obraz musi być w formacie JPEG, PNG, GIF lub WebP i mieć najwyżej 10 MB."
+      },
+      "abort": {
+        "reconfigure_successful": "Pojazd zaktualizowany.",
+        "location_set": "Lokalizacja zaktualizowana.",
+        "not_loaded": "Integracja nie jest jeszcze załadowana, spróbuj ponownie za chwilę."
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Opcje Bluetooth Device GPS",
+        "description": "Ustawienia wspólne dla wszystkich pojazdów.",
+        "data": {
+          "phones": "Telefony",
+          "disconnect_grace": "Minimalny czas przed zaparkowaniem",
+          "fix_timeout": "Czas trwania żądania lokalizacji",
+          "max_accuracy": "Wystarczająca dokładność",
+          "live_min_interval": "Minimalna liczba sekund między aktualizacjami na żywo"
+        },
+        "data_description": {
+          "phones": "Tylko te telefony przesuwają pojazdy. Zostaw puste, aby zezwolić każdemu telefonowi z włączonym czujnikiem połączenia Bluetooth.",
+          "disconnect_grace": "Lokalizacja jest żądana w chwili rozłączenia ostatniego telefonu. Pojazd jest parkowany dopiero po tym czasie, aby krótkie rozłączenia i ponowne uruchomienia silnika go nie zaparkowały.",
+          "fix_timeout": "Jak długo próbować uzyskać dokładną pozycję po rozłączeniu, zanim zostanie użyta najlepsza dostępna (domyślnie 5 minut).",
+          "max_accuracy": "Pozycja o co najmniej takiej dokładności (w metrach) jest akceptowana jako miejsce parkowania. Wygrywa pierwsza, która dotrze.",
+          "live_min_interval": "Ograniczenie pozycji na żywo podczas jazdy. 0 podąża za każdą aktualizacją."
+        }
+      }
+    }
+  },
+  "entity": {
+    "binary_sensor": {
+      "connected": {
+        "name": "Połączony"
+      }
+    },
+    "sensor": {
+      "last_driver": {
+        "name": "Ostatni kierowca"
+      },
+      "parked_since": {
+        "name": "Zaparkowano od"
+      }
+    },
+    "event": {
+      "activity": {
+        "name": "Aktywność",
+        "state_attributes": {
+          "event_type": {
+            "state": {
+              "parked": "Zaparkowano",
+              "departed": "Odjazd"
+            }
+          }
+        }
+      }
+    }
+  },
+  "services": {
+    "set_location": {
+      "name": "Ustaw lokalizację",
+      "description": "Przenosi pojazd na podane współrzędne.",
+      "fields": {
+        "location": {
+          "name": "Lokalizacja",
+          "description": "Wybierz pozycję na mapie. Promień jest używany jako dokładność."
+        }
+      }
+    }
+  },
+  "issues": {
+    "no_bluetooth_sensor": {
+      "title": "Brak telefonu z czujnikiem połączenia Bluetooth",
+      "description": "Żaden telefon z aplikacją Companion nie ma włączonego czujnika **Połączenie Bluetooth**, więc nie można śledzić pojazdów. Włącz go w aplikacji na Androida (Ustawienia → Aplikacja Companion → Zarządzaj czujnikami → Połączenie Bluetooth) i w razie potrzeby w ustawieniach encji w Home Assistant. iOS nie udostępnia tego czujnika."
+    }
+  }
+}
