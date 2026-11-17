@@ -23,7 +23,7 @@ from .const import (
     BT_SENSOR_SUFFIX,
     REQUEST_LOCATION_MESSAGE,
 )
-from .helpers import parse_macs
+from .helpers import device_label, parse_macs
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant, State
@@ -108,13 +108,14 @@ class AndroidCompanionProvider(PhoneProvider):
         return connected
 
     def known_devices(self, state: State) -> dict[str, str]:
-        """Paired and connected devices; the format is `MAC (name)` or `name (MAC)`."""
+        """Paired and connected devices as `{mac: "name (MAC)"}`; the app sends either order."""
         devices: dict[str, str] = {}
         for attribute in (BT_ATTR_PAIRED, BT_ATTR_CONNECTED):
             for item in state.attributes.get(attribute) or []:
                 macs = parse_macs(item)
                 if len(macs) == 1:
-                    devices.setdefault(next(iter(macs)), str(item))
+                    mac = next(iter(macs))
+                    devices.setdefault(mac, device_label(str(item), mac))
         return devices
 
     async def async_request_location(self, hass: HomeAssistant, phone: Phone) -> bool:

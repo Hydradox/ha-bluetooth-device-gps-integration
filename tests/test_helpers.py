@@ -55,3 +55,6 @@ def test_android_provider_reads_every_connected_list():
     assert provider.parse_connected(State("sensor.x", "unavailable")) is None
     assert provider.parse_connected(State("sensor.x", "0")) == set()
     assert "11:22:33:44:55:66" in provider.known_devices(state)
+    devices = provider.known_devices(state)
+    assert devices["11:22:33:44:55:66"] == "Headset (11:22:33:44:55:66)"
+    assert devices["00:0E:9F:7F:77:DC"] == "Car (00:0E:9F:7F:77:DC)"

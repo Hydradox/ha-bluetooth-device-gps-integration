@@ -4,16 +4,11 @@
 
 Available in English (default and fallback), Dutch, French, German, Italian, Norwegian (Bokmål), Polish, Portuguese, Spanish, Swedish and Danish.
 
-[![Add to HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=Hydradox&repository=ha-bluetooth-device-gps-integration&category=integration)
-
 ## Installation
 
-### HACS (recommended)
+### Marketplace (recommended)
 
-1. In Home Assistant open **HACS**, menu (⋮) → **Custom repositories**.
-2. Add `https://github.com/Hydradox/ha-bluetooth-device-gps-integration` with category **Integration**.
-3. Search for **Bluetooth Device GPS**, download it and restart Home Assistant.
-4. **Settings → Devices & services → Add integration → Bluetooth Device GPS**.
+[![Add to HACS](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=Hydradox&repository=ha-bluetooth-device-gps-integration&category=integration)
 
 ### Manual
 
@@ -64,10 +59,10 @@ Per device (one device):
 
 | Entity | Description |
 | ------ | ----------- |
-| `device_tracker.<device>` | GPS position. Attributes: `phase` (`connected`, `settling`, `parked`), `location_source` (`live`, `requested_fix`, `last_live`, `stale`, `manual`), `last_driver`, `fix_time` |
+| `device_tracker.<device>` | GPS position. Attributes: `phase` (`connected`, `settling`, `parked`), `location_source` (`live`, `requested_fix`, `last_live`, `stale`, `manual`, `home`), `last_driver`, `fix_time` |
 | `binary_sensor.<device>_connected` | On while a phone is connected to the device |
 | `event.<device>_activity` | Fires `parked` (when the final location is known) and `departed` (when a phone connects to a parked device). Attributes: `latitude`, `longitude`, `accuracy`, `location_source`, `last_driver`, `parked_at`. Use it as an automation trigger, for example to notify where you parked |
-| `sensor.<device>_last_driver` | Name of the phone that connected last |
+| `sensor.<device>_last_driver` | Person (the `person` entity that has the phone's `device_tracker`) who connected last; falls back to the phone's name when no person is linked |
 | `sensor.<device>_parked_since` | When the device was parked (unknown while driving) |
 
 To place a device by hand (for example after a phone ran out of battery) use either:

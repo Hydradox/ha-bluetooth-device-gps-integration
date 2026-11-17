@@ -50,6 +50,7 @@ SOURCE_REQUESTED = "requested_fix"
 SOURCE_LAST_LIVE = "last_live"
 SOURCE_STALE = "stale"
 SOURCE_MANUAL = "manual"
+SOURCE_HOME = "home"
 
 BT_SENSOR_SUFFIX = "bluetooth_connection"
 BT_ATTR_CONNECTED = "connected_paired_devices"

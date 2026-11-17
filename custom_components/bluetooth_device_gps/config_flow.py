@@ -140,7 +140,7 @@ def _known_devices(hass: HomeAssistant) -> list[SelectOptionDict]:
             options.setdefault(mac, label)
     return [
         SelectOptionDict(value=mac, label=label)
-        for mac, label in sorted(options.items(), key=lambda i: i[1])
+        for mac, label in sorted(options.items(), key=lambda i: i[1].casefold())
     ]
 
 
@@ -253,7 +253,7 @@ class VehicleSubentryFlow(ConfigSubentryFlow):
         schema = vol.Schema(
             {
                 vol.Required(CONF_NAME): str,
-                vol.Required(CONF_MACS): SelectSelector(
+                vol.Optional(CONF_MACS): SelectSelector(
                     SelectSelectorConfig(
                         options=_known_devices(self.hass),
                         multiple=True,

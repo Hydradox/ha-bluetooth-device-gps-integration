@@ -32,6 +32,7 @@ from .const import (
     PHASE_CONNECTED,
     PHASE_PARKED,
     PHASE_SETTLING,
+    SOURCE_HOME,
     SOURCE_LAST_LIVE,
     SOURCE_LIVE,
     SOURCE_MANUAL,
@@ -205,6 +206,8 @@ class BluetoothGpsManager:
                 subentry.data.get(CONF_PICTURE),
             )
             vehicle.restore(saved.get(subentry.subentry_id, {}))
+            if vehicle.fix is None:
+                self._place_at_home(vehicle)
             self.vehicles[subentry.subentry_id] = vehicle
 
         self._discover()
@@ -304,6 +307,27 @@ class BluetoothGpsManager:
             self._evaluate(vehicle)
 
     @callback
+    def _place_at_home(self, vehicle: Vehicle) -> None:
+        """Give a brand-new vehicle the home zone as its initial location, if there is one."""
+        home = self.hass.states.get("zone.home")
+        if home is None:
+            return
+        lat, lon = home.attributes.get("latitude"), home.attributes.get("longitude")
+        if lat is None or lon is None:
+            return
+        vehicle.fix = Fix(lat, lon, home.attributes.get("radius"), dt_util.utcnow())
+        vehicle.source = SOURCE_HOME
+
+    @callback
+    def _driver_name(self, phone: Phone) -> str:
+        """Name of the person who owns the phone's tracker, falling back to the phone's name."""
+        if phone.tracker_id:
+            for state in self.hass.states.async_all("person"):
+                if phone.tracker_id in (state.attributes.get("device_trackers") or []):
+                    return state.name
+        return phone.name
+
+    @callback
     def _evaluate(self, vehicle: Vehicle) -> None:
         """Compare the current holders with the previous ones and move the state machine."""
         now = dt_util.utcnow()
@@ -320,7 +344,7 @@ class BluetoothGpsManager:
             vehicle.departures.clear()
             joined = holders - previous
             if joined:
-                vehicle.last_driver = self._phones[min(joined)].name
+                vehicle.last_driver = self._driver_name(self._phones[min(joined)])
             changed = bool(joined) or previous != holders
             departed = vehicle.phase == PHASE_PARKED
             if vehicle.phase != PHASE_CONNECTED:
